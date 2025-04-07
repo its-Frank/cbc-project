@@ -54,22 +54,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         // Then verify with API
-        const response = await fetch(`/api/auth/me`, {
-          credentials: "include",
-        });
+        try {
+          const response = await fetch(`/api/auth/me`, {
+            credentials: "include",
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user);
-          if (typeof window !== "undefined") {
-            localStorage.setItem("user", JSON.stringify(data.user));
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data.user);
+            if (typeof window !== "undefined") {
+              localStorage.setItem("user", JSON.stringify(data.user));
+            }
+          } else {
+            // If API says not authenticated, clear local storage
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("user");
+            }
+            setUser(null);
           }
-        } else {
-          // If API says not authenticated, clear local storage
-          if (typeof window !== "undefined") {
-            localStorage.removeItem("user");
-          }
-          setUser(null);
+        } catch (error) {
+          // Silently fail API calls during development
+          console.log("API auth check failed, using stored user if available");
         }
       } catch (error) {
         console.error("Auth check error:", error);

@@ -27,7 +27,6 @@ const userRoutes = require("./routes/users");
 // Initialize express app
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 // Prepare Next.js and then start the server
 nextApp.prepare().then(() => {
   // Middleware

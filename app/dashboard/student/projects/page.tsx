@@ -1,3 +1,5 @@
+"use client";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -7,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, CheckCircle, Clock, Download } from "lucide-react";
-import Link from "next/link";
 
 export default function StudentProjects() {
   // Mock projects data
@@ -49,6 +50,20 @@ export default function StudentProjects() {
       ],
     },
   ];
+
+  const handleDownload = (fileName: string) => {
+    // In a real app, this would trigger a file download
+    // For this mock implementation, we'll just show an alert
+    alert(`Downloading ${fileName}...`);
+
+    // In a real implementation, you would use something like:
+    // const link = document.createElement('a')
+    // link.href = `/api/download?file=${encodeURIComponent(fileName)}`
+    // link.download = fileName
+    // document.body.appendChild(link)
+    // link.click()
+    // document.body.removeChild(link)
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -109,7 +124,11 @@ export default function StudentProjects() {
                           ({file.size})
                         </span>
                       </div>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDownload(file.name)}
+                      >
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download {file.name}</span>
                       </Button>
